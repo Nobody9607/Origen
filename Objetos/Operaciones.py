@@ -6,7 +6,3 @@ class operacion():
         self.monto = monto
         self.concepto = concepto
         self.tipo = tipo
-
-ingreso = operacion("21/05/2023", 500, "Venta carro", "ingreso")
-
-print(ingreso.fecha)
