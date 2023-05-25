@@ -16,7 +16,7 @@ class VentanaPrincipal(QtWidgets.QMainWindow):
         self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
         self.Bienvenida = QtWidgets.QLabel(self.centralwidget)
-        self.Bienvenida.setGeometry(QtCore.QRect(50, 20, 301, 81))
+        self.Bienvenida.setGeometry(QtCore.QRect(50, 20, 301,  81))
         self.Bienvenida.setAlignment(QtCore.Qt.AlignCenter)
         self.Bienvenida.setObjectName("Bienvenida")
         self.Gastado = QtWidgets.QLabel(self.centralwidget)
@@ -115,6 +115,7 @@ class VentanaPrincipal(QtWidgets.QMainWindow):
         self.actionGuardar_mes = QtWidgets.QAction(self)
         self.actionGuardar_mes.setObjectName("actionGuardar_mes")
         self.actionInformacion = QtWidgets.QAction(self)
+        self.actionInformacion.triggered.connect(info)
         self.actionInformacion.setObjectName("actionInformacion")
         self.menuOperaciones.addAction(self.actionGasto)
         self.menuOperaciones.addSeparator()
@@ -144,11 +145,14 @@ class VentanaPrincipal(QtWidgets.QMainWindow):
 
 
         self.timer = QtCore.QTimer(self)
-        self.timer.singleShot(1000, lambda: (ActualizarLabel(self.NuGastado, self.NuIngresado, self.NuUtilidades)))
+        self.timer.setInterval(4000)
+        self.timer.timeout.connect(lambda: (ActualizarLabel(self.NuGastado, self.NuIngresado, self.NuUtilidades)))
+        self.timer.start()
 
 
         self.retranslateUi(self)
         QtCore.QMetaObject.connectSlotsByName(self)
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

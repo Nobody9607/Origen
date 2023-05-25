@@ -1,6 +1,7 @@
 from Ventanas.operacion import *
 from Objetos.Operaciones import *
-from Ventanas.principal import *
+from Ventanas.info import *
+from PyQt5 import QtWidgets
 import json
 
 
@@ -58,7 +59,19 @@ def ActualizarLabel(label, label2, label3):
     label2.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#828296;\">{TotalIngresado}</span></p></body></html>")
     label3.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#828296;\">{Utilidades}</span></p></body></html>")
 
-def GuardarOperacion(timer, monto, concepto, tipo):
+def error(ventana, titulo, texto):
+    QtWidgets.QMessageBox.warning(ventana, titulo, texto)
+
+def GuardarOperacion(ventana, monto, concepto, tipo):
+    if not monto and not concepto:
+        error(ventana, "Error", "Los campos concepto y monto estan vacios")
+        return
+    elif not monto and concepto:
+        error(ventana, "Error", "Indique un monto")
+        return
+    elif monto and not concepto:
+        error(ventana, "Error", "Indique un concepto")
+        return
     NuevaOperacion = operacion("21/05/2023", monto, concepto, tipo)
     NuevaOperacion = NuevaOperacion.__dict__
     if tipo == "Gasto":
@@ -80,3 +93,8 @@ def GuardarOperacion(timer, monto, concepto, tipo):
         with open("TotalIngresado.json", "w") as archivo:
             json.dump(TotalIngresado, archivo)
 
+    ventana.close()
+
+def info():
+    a =VentanaInfo()
+    a.exec_()
