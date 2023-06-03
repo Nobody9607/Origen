@@ -1,5 +1,5 @@
-from Ventanas.Principal import *
 from PyQt5.QtWidgets import *
+from Windows.MainWindow import *
 import sys
 
 
@@ -7,6 +7,6 @@ app = QApplication(sys.argv)
 
 
 
-ventana = ventana()
-ventana.show()
+window = MainWindow()
+window.show()
 app.exec_()
