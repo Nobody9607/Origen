@@ -1,6 +1,6 @@
-from Ventanas.operacion import *
-from Objetos.Operaciones import *
-from Ventanas.info import *
+from Windows.operation import *
+from Class.Operations import *
+from Windows.info import *
 from PyQt5 import QtWidgets
 import json
 
@@ -48,7 +48,7 @@ def LeerIngresos():
     return ListadoIngresos
 
 def VentanaOperacion():
-    ventana = VentanasDeEntrada()
+    ventana = EnterWindow()
     ventana.exec()
     
 def ActualizarLabel(label, label2, label3):
@@ -59,22 +59,22 @@ def ActualizarLabel(label, label2, label3):
     label2.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#828296;\">{TotalIngresado}</span></p></body></html>")
     label3.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#828296;\">{Utilidades}</span></p></body></html>")
 
-def error(ventana, titulo, texto):
-    QtWidgets.QMessageBox.warning(ventana, titulo, texto)
+def error(parent, title, text):
+    QtWidgets.QMessageBox.warning(parent, title, text)
 
-def GuardarOperacion(ventana, monto, concepto, tipo):
-    if not monto and not concepto:
-        error(ventana, "Error", "Los campos concepto y monto estan vacios")
+def GuardarOperacion(window, monto, concept, type):
+    if not monto and not concept:
+        error(window, "Error", "Los campos concepto y monto estan vacios")
         return
-    elif not monto and concepto:
-        error(ventana, "Error", "Indique un monto")
+    elif not monto and concept:
+        error(window, "Error", "Indique un monto")
         return
-    elif monto and not concepto:
-        error(ventana, "Error", "Indique un concepto")
+    elif monto and not concept:
+        error(window, "Error", "Indique un concepto")
         return
-    NuevaOperacion = operacion("21/05/2023", monto, concepto, tipo)
+    NuevaOperacion = operation("21/05/2023", monto, concept, type)
     NuevaOperacion = NuevaOperacion.__dict__
-    if tipo == "Gasto":
+    if type == "Gasto":
         ListadoGastos = LeerGastos()
         ListadoGastos.append(NuevaOperacion)
         with open("gastos.json", "w") as archivo:
@@ -93,8 +93,8 @@ def GuardarOperacion(ventana, monto, concepto, tipo):
         with open("TotalIngresado.json", "w") as archivo:
             json.dump(TotalIngresado, archivo)
 
-    ventana.close()
+    window.close()
 
 def info():
-    a =VentanaInfo()
+    a =InfoWindow()
     a.exec_()

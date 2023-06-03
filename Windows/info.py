@@ -1,9 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class VentanaInfo(QtWidgets.QDialog):
+class InfoWindow(QtWidgets.QDialog):
     def __init__(self):
-        super(VentanaInfo, self).__init__()
+        super(InfoWindow, self).__init__()
         self.setObjectName("Dialog")
         self.resize(331, 397)
         self.setMinimumSize(QtCore.QSize(331, 397))

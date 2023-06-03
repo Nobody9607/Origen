@@ -1,10 +1,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from Objetos.funciones import *
+from Class.functions import *
 
 
-class VentanaPrincipal(QtWidgets.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
-        super(VentanaPrincipal, self).__init__()
+        super(MainWindow, self).__init__()
         self.setObjectName("MainWindow")
         self.resize(800, 600)
         self.setMinimumSize(QtCore.QSize(800, 600))

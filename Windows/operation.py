@@ -1,18 +1,18 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from Objetos import funciones
-from Ventanas.principal import *
+from Class import functions
+from Windows.MainWindow import *
 
 
-class VentanasDeEntrada(QtWidgets.QDialog):
+class EnterWindow(QtWidgets.QDialog):
     def __init__(self):
-        super(VentanasDeEntrada, self).__init__()
+        super(EnterWindow, self).__init__()
         self.setObjectName("VentanasDeEntrada")
         self.resize(600, 300)
         self.setMinimumSize(QtCore.QSize(600, 300))
         self.setMaximumSize(QtCore.QSize(600, 300))
         self.setStyleSheet("background-color: rgb(99, 99, 118);")
         self.pushButton = QtWidgets.QPushButton(self)
-        self.pushButton.clicked.connect(lambda: (funciones.GuardarOperacion(self, self.lineEdit.text(), self.lineEdit_2.text(), self.comboBox.currentText())))
+        self.pushButton.clicked.connect(lambda: (functions.GuardarOperacion(self, self.lineEdit.text(), self.lineEdit_2.text(), self.comboBox.currentText())))
         self.pushButton.setGeometry(QtCore.QRect(90, 230, 161, 41))
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -77,9 +77,9 @@ class VentanasDeEntrada(QtWidgets.QDialog):
         self.retranslateUi(self)
         QtCore.QMetaObject.connectSlotsByName(self)
 
-    def retranslateUi(self, VentanasDeEntrada):
+    def retranslateUi(self, EnterWindow):
         _translate = QtCore.QCoreApplication.translate
-        VentanasDeEntrada.setWindowTitle(_translate("VentanasDeEntrada", "Operación"))
+        EnterWindow.setWindowTitle(_translate("VentanasDeEntrada", "Operación"))
         self.pushButton.setText(_translate("VentanasDeEntrada", "Aceptar"))
         self.pushButton_2.setText(_translate("VentanasDeEntrada", "Cancelar"))
         self.label.setText(_translate("VentanasDeEntrada", "<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600; font-style:italic; color:#848696;\">Indique Operación</span></p></body></html>"))
