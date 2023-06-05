@@ -87,6 +87,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.actionGasto.triggered.connect(VentanaOperacion)
         self.actionGasto.setObjectName("actionGasto")
         self.actionGastos = QtWidgets.QAction(self)
+        self.actionGastos.triggered.connect(lambda: TablesWindows("gastos"))
         self.actionGastos.setObjectName("actionGastos")
         self.actionIngresos = QtWidgets.QAction(self)
         self.actionIngresos.setObjectName("actionIngresos")
