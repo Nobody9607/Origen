@@ -104,7 +104,33 @@ def info():
     a.exec_()
 
 
-def TablesWindows(Type):
+def TablesWindows(Type, Frequency):
     from Windows.tables import tables
-    asd = tables(Type)
+    asd = tables(Type, Frequency)
     asd.exec_()
+
+
+def DatosAmbosDaily():
+    gastos = LeerGastos()
+    ingresos = LeerIngresos()
+    transacciones = gastos + ingresos
+    transacciones.sort(key=lambda x: x['fecha'])
+    resultado = []
+    NuevaTransaccion = {}
+
+    for transaccion in transacciones:
+        fecha = transaccion["fecha"]
+        monto = int(transaccion["monto"])
+        Type = transaccion["type"]
+        try:
+            if fecha in NuevaTransaccion["fecha"] and Type in NuevaTransaccion["type"]:
+                NuevaTransaccion["monto"] += monto
+            else:
+                NuevaTransaccion = {"fecha": fecha, "monto": monto, "type": Type}
+        except:
+            NuevaTransaccion = {"fecha": fecha, "monto": monto, "type": Type}
+        finally:
+            if not NuevaTransaccion in resultado:
+                resultado.append(NuevaTransaccion)
+
+    return resultado
