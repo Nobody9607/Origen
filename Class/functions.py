@@ -1,9 +1,10 @@
-from Windows.operation import *
-from Class.Operations import *
-from Windows.info import *
 from PyQt5 import QtWidgets
+from datetime import *
 import json
 
+
+today = date.today()
+today = today.strftime("%d/%m/%Y")
 
 def LeerTotalGastado():
     try:
@@ -48,6 +49,7 @@ def LeerIngresos():
     return ListadoIngresos
 
 def VentanaOperacion():
+    from Windows.operation import EnterWindow
     ventana = EnterWindow()
     ventana.exec()
     
@@ -63,6 +65,7 @@ def error(parent, title, text):
     QtWidgets.QMessageBox.warning(parent, title, text)
 
 def GuardarOperacion(window, monto, concept, type):
+    from Class.Operations import operation
     if not monto and not concept:
         error(window, "Error", "Los campos concepto y monto estan vacios")
         return
@@ -72,7 +75,7 @@ def GuardarOperacion(window, monto, concept, type):
     elif monto and not concept:
         error(window, "Error", "Indique un concepto")
         return
-    NuevaOperacion = operation("21/05/2023", monto, concept, type)
+    NuevaOperacion = operation(today, monto, concept, type)
     NuevaOperacion = NuevaOperacion.__dict__
     if type == "Gasto":
         ListadoGastos = LeerGastos()
@@ -96,5 +99,38 @@ def GuardarOperacion(window, monto, concept, type):
     window.close()
 
 def info():
+    from Windows.info import InfoWindow
     a =InfoWindow()
     a.exec_()
+
+
+def TablesWindows(Type, Frequency):
+    from Windows.tables import tables
+    asd = tables(Type, Frequency)
+    asd.exec_()
+
+
+def DatosAmbosDaily():
+    gastos = LeerGastos()
+    ingresos = LeerIngresos()
+    transacciones = gastos + ingresos
+    transacciones.sort(key=lambda x: x['fecha'])
+    resultado = []
+    NuevaTransaccion = {}
+
+    for transaccion in transacciones:
+        fecha = transaccion["fecha"]
+        monto = int(transaccion["monto"])
+        Type = transaccion["type"]
+        try:
+            if fecha in NuevaTransaccion["fecha"] and Type in NuevaTransaccion["type"]:
+                NuevaTransaccion["monto"] += monto
+            else:
+                NuevaTransaccion = {"fecha": fecha, "monto": monto, "type": Type}
+        except:
+            NuevaTransaccion = {"fecha": fecha, "monto": monto, "type": Type}
+        finally:
+            if not NuevaTransaccion in resultado:
+                resultado.append(NuevaTransaccion)
+
+    return resultado
