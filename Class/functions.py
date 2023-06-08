@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets
 from datetime import *
+import pyqtgraph as pg
 import json
 
 
@@ -110,15 +111,12 @@ def TablesWindows(Type, Frequency):
     asd.exec_()
 
 
-def DatosAmbosDaily():
-    gastos = LeerGastos()
-    ingresos = LeerIngresos()
-    transacciones = gastos + ingresos
-    transacciones.sort(key=lambda x: x['fecha'])
+def DatosDaily(datos):
+    datos.sort(key=lambda x: x['fecha'])
     resultado = []
     NuevaTransaccion = {}
 
-    for transaccion in transacciones:
+    for transaccion in datos:
         fecha = transaccion["fecha"]
         monto = int(transaccion["monto"])
         Type = transaccion["type"]
@@ -134,3 +132,31 @@ def DatosAmbosDaily():
                 resultado.append(NuevaTransaccion)
 
     return resultado
+
+
+def OpenGraphicsWindow(Type, Frequency):
+    if Type == "gastos" and Frequency == "Diario":
+        lista =  DatosDaily(LeerGastos())
+    if Type == "ingresos" and Frequency == "Diario":
+        lista = DatosDaily(LeerIngresos())
+    if Type == "gastos" and  Frequency == "Todos":
+        lista = LeerGastos()
+    if Type == "ingresos" and Frequency == "Todos":
+        lista = LeerIngresos()
+
+    window = pg.plot()
+    window.setGeometry(100, 100, 600, 500)
+    title = "Gráfico de barras con PyQtGraph"
+    window.setWindowTitle(title)
+
+    valores = []
+    for dic in lista:
+        valor = int(dic["monto"])
+        valores.append(valor)
+    x = range(1, len(valores) + 1)
+
+    bargraph = pg.BarGraphItem(x=x, height=valores, width=0.8, brush='w')
+    window.addItem(bargraph)
+    viewbox = window.getViewBox()
+    viewbox.setMouseEnabled(y=False)
+    viewbox.setLimits(xMin=0)

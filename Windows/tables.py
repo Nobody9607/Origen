@@ -31,8 +31,8 @@ class tables(QtWidgets.QDialog):
         elif self.Frequency == "Todas" and not Type == "ambos":
             self.AllOperations()
         elif self.Type == "ambos" and Frequency == "Diario":
-            from Class.functions import DatosAmbosDaily
-            self.data = DatosAmbosDaily()
+            from Class.functions import DatosDaily
+            self.data = DatosDaily(LeerIngresos() + LeerGastos())
             self.AmbosDialy()
         elif self.Type == "ambos" and Frequency == "Todas":
             self.gastos = LeerGastos()
