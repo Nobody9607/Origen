@@ -12,7 +12,7 @@ class EnterWindow(QtWidgets.QDialog):
         self.setMaximumSize(QtCore.QSize(600, 300))
         self.setStyleSheet("background-color: rgb(99, 99, 118);")
         self.pushButton = QtWidgets.QPushButton(self)
-        self.pushButton.clicked.connect(lambda: (functions.GuardarOperacion(self, self.lineEdit.text(), self.lineEdit_2.text(), self.comboBox.currentText())))
+        self.pushButton.clicked.connect(lambda: (functions.SaveOperation(self, self.lineEdit.text(), self.lineEdit_2.text(), self.comboBox.currentText())))
         self.pushButton.setGeometry(QtCore.QRect(90, 230, 161, 41))
         font = QtGui.QFont()
         font.setPointSize(11)

@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui
 from Class.functions import *
 
 
@@ -84,7 +84,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.menuInformacion.setObjectName("menuInformacion")
         self.setMenuBar(self.menubar)
         self.actionGasto = QtWidgets.QAction(self)
-        self.actionGasto.triggered.connect(VentanaOperacion)
+        self.actionGasto.triggered.connect(OperationWindow)
         self.actionGasto.setObjectName("actionGasto")
         self.actionGastos = QtWidgets.QAction(self)
         self.actionGastos.triggered.connect(lambda: TablesWindows("gastos", "Diario"))
@@ -117,6 +117,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.actionIngresos_4.triggered.connect(lambda: OpenGraphicsWindow("ingresos", "Diario"))
         self.actionIngresos_4.setObjectName("actionIngresos_4")
         self.actionPDF = QtWidgets.QAction(self)
+        self.actionPDF.triggered.connect(PdfWindow)
         self.actionPDF.setObjectName("actionPDF")
         self.actionGuardar_mes = QtWidgets.QAction(self)
         self.actionGuardar_mes.setObjectName("actionGuardar_mes")
@@ -150,7 +151,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.timer = QtCore.QTimer(self)
         self.timer.setInterval(4000)
-        self.timer.timeout.connect(lambda: (ActualizarLabel(self.NuGastado, self.NuIngresado, self.NuUtilidades)))
+        self.timer.timeout.connect(lambda: (LabelUpdate(self.NuGastado, self.NuIngresado, self.NuUtilidades)))
         self.timer.start()
 
 
@@ -160,7 +161,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Ventana Principal"))
         self.Bienvenida.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600; color:#828296;\">Bienvenido(a)</span></p></body></html>"))
         self.Gastado.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600; color:#828296;\">Total Gastado</span></p></body></html>"))
         self.Ingresado.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600; color:#828296;\">Total Ingresado</span></p></body></html>"))
