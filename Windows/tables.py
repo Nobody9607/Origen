@@ -21,7 +21,7 @@ class tables(QtWidgets.QDialog):
 
         # Lee los datos del archivo correspondiente
         if self.Type == "gastos":
-            self.data = LeerGastos()
+            self.data = ReadExpenses()
         elif self.Type == "ingresos":
             self.data = LeerIngresos()
 
@@ -32,10 +32,10 @@ class tables(QtWidgets.QDialog):
             self.AllOperations()
         elif self.Type == "ambos" and Frequency == "Diario":
             from Class.functions import DatosDaily
-            self.data = DatosDaily(LeerIngresos() + LeerGastos())
+            self.data = DatosDaily(LeerIngresos() + ReadExpenses())
             self.AmbosDialy()
         elif self.Type == "ambos" and Frequency == "Todas":
-            self.gastos = LeerGastos()
+            self.gastos = ReadExpenses()
             for dic in self.gastos:
                 dic["operation"] = "gasto"
             self.ingresos = LeerIngresos()

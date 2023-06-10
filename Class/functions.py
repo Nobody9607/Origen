@@ -1,11 +1,30 @@
 from PyQt5 import QtWidgets
 from datetime import *
 import pyqtgraph as pg
+from reportlab.pdfgen import canvas
+from reportlab.platypus import Spacer, Paragraph, SimpleDocTemplate, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors, styles
+from reportlab.lib.pagesizes import letter
 import json
 
 
 today = date.today()
-today = today.strftime("%d/%m/%Y")
+todayFormat = today.strftime("%d/%m/%Y")
+months = {
+        1: 'enero',
+        2: 'febrero',
+        3: 'marzo',
+        4: 'abril',
+        5: 'mayo',
+        6: 'junio',
+        7: 'julio',
+        8: 'agosto',
+        9: 'septiembre',
+        10: 'octubre',
+        11: 'noviembre',
+        12: 'diciembre'
+    }
 
 def LeerTotalGastado():
     try:
@@ -25,14 +44,14 @@ def LeerTotalIngresado():
 
     return TotalIngresado
 
-def LeerGastos():
+def ReadExpenses():
     try:
         with open("gastos.json", "r") as archivo:
-            ListadoGastos = json.load(archivo)
+            ExpenseList = json.load(archivo)
     except:
-        ListadoGastos = []
+        ExpenseList = []
     
-    return ListadoGastos
+    return ExpenseList
 
 def CalcularUtilidades():
     TotalGastado = LeerTotalGastado()
@@ -49,12 +68,12 @@ def LeerIngresos():
 
     return ListadoIngresos
 
-def VentanaOperacion():
+def OperationWindow():
     from Windows.operation import EnterWindow
     ventana = EnterWindow()
     ventana.exec()
     
-def ActualizarLabel(label, label2, label3):
+def LabelUpdate(label, label2, label3):
     TotalGastado = LeerTotalGastado()
     TotalIngresado = LeerTotalIngresado()
     Utilidades = CalcularUtilidades()
@@ -65,39 +84,43 @@ def ActualizarLabel(label, label2, label3):
 def error(parent, title, text):
     QtWidgets.QMessageBox.warning(parent, title, text)
 
-def GuardarOperacion(window, monto, concept, type):
+def SaveOperation(window, amount, concept, type):
     from Class.Operations import operation
-    if not monto and not concept:
+    if not amount and not concept:
         error(window, "Error", "Los campos concepto y monto estan vacios")
         return
-    elif not monto and concept:
+    elif not amount and concept:
         error(window, "Error", "Indique un monto")
         return
-    elif monto and not concept:
+    elif amount and not concept:
         error(window, "Error", "Indique un concepto")
         return
-    NuevaOperacion = operation(today, monto, concept, type)
-    NuevaOperacion = NuevaOperacion.__dict__
+    NewOperation = operation(todayFormat, amount, concept, type)
+    NewOperation = NewOperation.__dict__
     if type == "Gasto":
-        ListadoGastos = LeerGastos()
-        ListadoGastos.append(NuevaOperacion)
+        ExpenseList = ReadExpenses()
+        ExpenseList.append(NewOperation)
         with open("gastos.json", "w") as archivo:
-            json.dump(ListadoGastos, archivo)
+            json.dump(ExpenseList, archivo)
+
         TotalGastado = LeerTotalGastado()
-        TotalGastado = TotalGastado + int(NuevaOperacion.get("monto"))
+        TotalGastado = TotalGastado + int(NewOperation.get("monto"))
         with open("TotalGastado.json", "w") as archivo:
             json.dump(TotalGastado, archivo)
     else:
         ListadoIngresos = LeerIngresos()
-        ListadoIngresos.append(NuevaOperacion)
+        ListadoIngresos.append(NewOperation)
         with open("ingresos.json", "w") as archivo:
             json.dump(ListadoIngresos, archivo)
         TotalIngresado = LeerTotalIngresado()
-        TotalIngresado = TotalIngresado + int(NuevaOperacion.get("monto"))
+        TotalIngresado = TotalIngresado + int(NewOperation.get("monto"))
         with open("TotalIngresado.json", "w") as archivo:
             json.dump(TotalIngresado, archivo)
 
+
+
     window.close()
+
 
 def info():
     from Windows.info import InfoWindow
@@ -111,12 +134,12 @@ def TablesWindows(Type, Frequency):
     asd.exec_()
 
 
-def DatosDaily(datos):
-    datos.sort(key=lambda x: x['fecha'])
+def DatosDaily(data):
+    data.sort(key=lambda x: x['fecha'])
     resultado = []
     NuevaTransaccion = {}
 
-    for transaccion in datos:
+    for transaccion in data:
         fecha = transaccion["fecha"]
         monto = int(transaccion["monto"])
         Type = transaccion["type"]
@@ -136,11 +159,11 @@ def DatosDaily(datos):
 
 def OpenGraphicsWindow(Type, Frequency):
     if Type == "gastos" and Frequency == "Diario":
-        lista =  DatosDaily(LeerGastos())
+        lista =  DatosDaily(ReadExpenses())
     if Type == "ingresos" and Frequency == "Diario":
         lista = DatosDaily(LeerIngresos())
     if Type == "gastos" and  Frequency == "Todos":
-        lista = LeerGastos()
+        lista = ReadExpenses()
     if Type == "ingresos" and Frequency == "Todos":
         lista = LeerIngresos()
 
@@ -160,3 +183,101 @@ def OpenGraphicsWindow(Type, Frequency):
     viewbox = window.getViewBox()
     viewbox.setMouseEnabled(y=False)
     viewbox.setLimits(xMin=0)
+
+
+def PdfWindow():
+    from Windows.PdfExport import Ui_Dialog
+    window = Ui_Dialog()
+    window.exec_()
+
+
+def PdfExport(ventana, lista):
+    style = ParagraphStyle(name="normal")
+    spacer = Spacer(0, 10)
+    styleCenter = ParagraphStyle(name="normal", alignment=1)
+    styleRight = ParagraphStyle(name="normal", alignment=2, fontSize=6)
+    InitialText = Paragraph(f"Holguin, {today.day} de {months[today.month]} del {today.year}", style)
+    PdfElements = [InitialText]
+    doc = SimpleDocTemplate(f"Operaciones de {months[today.month]} .pdf", pagesize = letter)
+
+    def DailyTableCreate(data, palabra):
+        if not data:
+            return
+        TableData = [["Fecha", "Monto"]]
+        Text = Paragraph(f"Tabla por dia de {palabra}", styleCenter)
+
+        for operation in data[-30:]:
+            NewList = []
+            NewList.append(operation["fecha"])
+            NewList.append(operation["monto"])
+            TableData.append(NewList)
+
+        table = Table(TableData)
+        table.setStyle([('GRID', (0, 0), (-1, -1), 1, colors.black), ])
+        table.setStyle([('BACKGROUND', (0, 0), (-1, 0), colors.beige), ])
+        table.setStyle([('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke), ])
+        table.setStyle([('ALIGN', (0, 0), (-1, -1), 'CENTER')])
+
+        PdfElements.append(spacer)
+        PdfElements.append(Text)
+        PdfElements.append(spacer)
+        PdfElements.append(table)
+        PdfElements.append(spacer)
+
+    def TableCreate(data, palabra):
+        if not data:
+            return
+        TableData = [["Fecha", "Monto", "Concepto"]]
+        Text = Paragraph(f"Tabla ultimas 30 operaciones en {palabra}", styleCenter)
+        for expense in data[-30:]:
+            NewList = []
+            NewList.append(expense["fecha"])
+            NewList.append(expense["monto"])
+            NewList.append(expense["concept"])
+            TableData.append(NewList)
+
+        table = Table(TableData)
+        table.setStyle([('GRID', (0, 0), (-1, -1), 1, colors.black), ])
+        table.setStyle([('BACKGROUND', (0, 0), (-1, 0), colors.beige), ])
+        table.setStyle([('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke), ])
+        table.setStyle([('ALIGN', (0, 0), (-1, -1), 'CENTER')])
+        table._argW[-1] = 150
+
+        PdfElements.append(spacer)
+        PdfElements.append(Text)
+        PdfElements.append(spacer)
+        PdfElements.append(table)
+        PdfElements.append(spacer)
+
+    def TGTodos():
+        ExpensesList = ReadExpenses()
+        TableCreate(ExpensesList, "gastos")
+
+    def TITodos():
+        IngresosList = LeerIngresos()
+        TableCreate(IngresosList, "ingresos")
+
+    def TGDiarios():
+        Expenses = ReadExpenses()
+        data = DatosDaily(Expenses)
+        DailyTableCreate(data, "gastos")
+
+    def TIDiarios():
+        Operations = LeerIngresos()
+        data = DatosDaily(Operations)
+        DailyTableCreate(data, "ingresos")
+
+    for element in lista:
+        try:
+            locals()[element]()
+        except:
+            pass
+
+    PdfElements.append(spacer)
+    FinalText = Paragraph("Este PDF ha sido generado por la aplicacion CONTABLE", styleRight)
+    PdfElements.append(FinalText)
+
+    try:
+        doc.build(PdfElements)
+    except Exception as ex:
+        error(ventana, "Ha ocurrido un error", f"{ex}")
