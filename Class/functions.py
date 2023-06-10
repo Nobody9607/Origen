@@ -201,6 +201,8 @@ def PdfExport(ventana, lista):
     doc = SimpleDocTemplate(f"Operaciones de {months[today.month]} .pdf", pagesize = letter)
 
     def DailyTableCreate(data, palabra):
+        if not data:
+            return
         TableData = [["Fecha", "Monto"]]
         Text = Paragraph(f"Tabla por dia de {palabra}", styleCenter)
 
@@ -210,19 +212,21 @@ def PdfExport(ventana, lista):
             NewList.append(operation["monto"])
             TableData.append(NewList)
 
-            table = Table(TableData)
-            table.setStyle([('GRID', (0, 0), (-1, -1), 1, colors.black), ])
-            table.setStyle([('BACKGROUND', (0, 0), (-1, 0), colors.beige), ])
-            table.setStyle([('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke), ])
-            table.setStyle([('ALIGN', (0, 0), (-1, -1), 'CENTER')])
+        table = Table(TableData)
+        table.setStyle([('GRID', (0, 0), (-1, -1), 1, colors.black), ])
+        table.setStyle([('BACKGROUND', (0, 0), (-1, 0), colors.beige), ])
+        table.setStyle([('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke), ])
+        table.setStyle([('ALIGN', (0, 0), (-1, -1), 'CENTER')])
 
-            PdfElements.append(spacer)
-            PdfElements.append(Text)
-            PdfElements.append(spacer)
-            PdfElements.append(table)
-            PdfElements.append(spacer)
+        PdfElements.append(spacer)
+        PdfElements.append(Text)
+        PdfElements.append(spacer)
+        PdfElements.append(table)
+        PdfElements.append(spacer)
 
     def TableCreate(data, palabra):
+        if not data:
+            return
         TableData = [["Fecha", "Monto", "Concepto"]]
         Text = Paragraph(f"Tabla ultimas 30 operaciones en {palabra}", styleCenter)
         for expense in data[-30:]:
