@@ -1,5 +1,5 @@
 
-class operation():
+class operation:
     def __init__(self, fecha, monto, concept, type):
         super().__init__()
         self.fecha = fecha

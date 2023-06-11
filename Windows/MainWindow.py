@@ -51,16 +51,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.menubar = QtWidgets.QMenuBar(self)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 29))
         self.menubar.setStyleSheet("QMenuBar{background:rgb(117, 117, 135); font: italic 12pt \"Sitka\"} \n"
-"QMenuBar::item:selected{background: rgb(102, 102, 118)}\n"
-"")
+                                   "QMenuBar::item:selected{background: rgb(102, 102, 118)}\n""")
         self.menubar.setObjectName("menubar")
         self.menuOperaciones = QtWidgets.QMenu(self.menubar)
         self.menuOperaciones.setStyleSheet("QMenu{background-color: rgb(117, 117, 135);}\n"
-"QMenu::item:selected{background-color: rgb(102, 102, 118); color: black}")
+                                           "QMenu::item:selected{background-color: rgb(102, 102, 118); color: black}")
         self.menuOperaciones.setObjectName("menuOperaciones")
         self.menuTablas = QtWidgets.QMenu(self.menubar)
         self.menuTablas.setStyleSheet("QMenu{background-color: rgb(117, 117, 135);}\n"
-"QMenu::item:selected{background-color: rgb(102, 102, 118); color: black}")
+                                      "QMenu::item:selected{background-color: rgb(102, 102, 118); color: black}")
         self.menuTablas.setObjectName("menuTablas")
         self.menuPor_dia = QtWidgets.QMenu(self.menuTablas)
         self.menuPor_dia.setObjectName("menuPor_dia")
@@ -68,7 +67,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.menuTodas_las_operaciones.setObjectName("menuTodas_las_operaciones")
         self.menuGraficas = QtWidgets.QMenu(self.menubar)
         self.menuGraficas.setStyleSheet("QMenu{background-color: rgb(117, 117, 135);}\n"
-"QMenu::item:selected{background-color: rgb(102, 102, 118); color: black}")
+                                        "QMenu::item:selected{background-color: rgb(102, 102, 118); color: black}")
         self.menuGraficas.setObjectName("menuGraficas")
         self.menuTodas_las_operaciones_2 = QtWidgets.QMenu(self.menuGraficas)
         self.menuTodas_las_operaciones_2.setObjectName("menuTodas_las_operaciones_2")
@@ -76,11 +75,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.menuPor_dia_2.setObjectName("menuPor_dia_2")
         self.menuExportar = QtWidgets.QMenu(self.menubar)
         self.menuExportar.setStyleSheet("QMenu{background-color: rgb(117, 117, 135);}\n"
-"QMenu::item:selected{background-color: rgb(102, 102, 118); color: black}")
+                                        "QMenu::item:selected{background-color: rgb(102, 102, 118); color: black}")
         self.menuExportar.setObjectName("menuExportar")
         self.menuInformacion = QtWidgets.QMenu(self.menubar)
         self.menuInformacion.setStyleSheet("QMenu{background-color: rgb(117, 117, 135);}\n"
-"QMenu::item:selected{background-color: rgb(102, 102, 118); color: black}")
+                                           "QMenu::item:selected{background-color: rgb(102, 102, 118); color: black}")
         self.menuInformacion.setObjectName("menuInformacion")
         self.setMenuBar(self.menubar)
         self.actionGasto = QtWidgets.QAction(self)
@@ -148,27 +147,38 @@ class MainWindow(QtWidgets.QMainWindow):
         self.menubar.addAction(self.menuExportar.menuAction())
         self.menubar.addAction(self.menuInformacion.menuAction())
 
-
         self.timer = QtCore.QTimer(self)
         self.timer.setInterval(4000)
         self.timer.timeout.connect(lambda: (LabelUpdate(self.NuGastado, self.NuIngresado, self.NuUtilidades)))
         self.timer.start()
 
-
         self.retranslateUi(self)
         QtCore.QMetaObject.connectSlotsByName(self)
-
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Ventana Principal"))
-        self.Bienvenida.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600; color:#828296;\">Bienvenido(a)</span></p></body></html>"))
-        self.Gastado.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600; color:#828296;\">Total Gastado</span></p></body></html>"))
-        self.Ingresado.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600; color:#828296;\">Total Ingresado</span></p></body></html>"))
-        self.Utilidades.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600; color:#828296;\">Utilidades</span></p></body></html>"))
-        self.NuUtilidades.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#828296;\">Cargando...</span></p></body></html>"))
-        self.NuIngresado.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#828296;\">Cargando...</span></p></body></html>"))
-        self.NuGastado.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#828296;\">Cargando...</span></p></body></html>"))
+        self.Bienvenida.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" "
+                                                         "font-size:24pt; font-weight:600; color:#828296;\""
+                                                         ">Bienvenido(a)</span></p></body></html>"))
+        self.Gastado.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" "
+                                                      "font-size:16pt; font-weight:600; color:#828296;\">Total "
+                                                      "Gastado</span></p></body></html>"))
+        self.Ingresado.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" "
+                                                        "font-size:16pt; font-weight:600; color:#828296;\">Total "
+                                                        "Ingresado</span></p></body></html>"))
+        self.Utilidades.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" "
+                                                         "font-size:16pt; font-weight:600; color:#828296;\""
+                                                         ">Utilidades</span></p></body></html>"))
+        self.NuUtilidades.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" "
+                                                           "font-size:14pt; font-weight:600; color:#828296;\""
+                                                           ">Cargando...</span></p></body></html>"))
+        self.NuIngresado.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" "
+                                                          "font-size:14pt; font-weight:600; color:#828296;\""
+                                                          ">Cargando...</span></p></body></html>"))
+        self.NuGastado.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" "
+                                                        "font-size:14pt; font-weight:600; color:#828296;\""
+                                                        ">Cargando...</span></p></body></html>"))
         self.menuOperaciones.setTitle(_translate("MainWindow", "Operaciones"))
         self.menuTablas.setTitle(_translate("MainWindow", "Tablas"))
         self.menuPor_dia.setTitle(_translate("MainWindow", "Por dia"))

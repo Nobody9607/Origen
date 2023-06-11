@@ -27,6 +27,7 @@ months = {
         12: 'diciembre'
     }
 
+
 def LeerTotalGastado():
     try:
         with open("TotalGastado.json", "r") as archivo:
@@ -34,7 +35,8 @@ def LeerTotalGastado():
     except:
         TotalGastado = 0
         
-    return  TotalGastado
+    return TotalGastado
+
 
 def LeerTotalIngresado():
     try:
@@ -45,6 +47,7 @@ def LeerTotalIngresado():
 
     return TotalIngresado
 
+
 def ReadExpenses():
     try:
         with open("gastos.json", "r") as archivo:
@@ -54,11 +57,13 @@ def ReadExpenses():
     
     return ExpenseList
 
+
 def CalcularUtilidades():
     TotalGastado = LeerTotalGastado()
     TotalIngresado = LeerTotalIngresado()
     Utilidades = TotalIngresado - TotalGastado
     return Utilidades
+
 
 def LeerIngresos():
     try:
@@ -69,11 +74,13 @@ def LeerIngresos():
 
     return ListadoIngresos
 
+
 def OperationWindow():
     from Windows.operation import EnterWindow
     ventana = EnterWindow()
     ventana.exec()
-    
+
+
 def LabelUpdate(label, label2, label3):
     TotalGastado = LeerTotalGastado()
     TotalIngresado = LeerTotalIngresado()
@@ -82,8 +89,10 @@ def LabelUpdate(label, label2, label3):
     label2.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#828296;\">{TotalIngresado}</span></p></body></html>")
     label3.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#828296;\">{Utilidades}</span></p></body></html>")
 
+
 def error(parent, title, text):
     QtWidgets.QMessageBox.warning(parent, title, text)
+
 
 def SaveOperation(window, amount, concept, type):
     from Class.Operations import operation
@@ -118,14 +127,12 @@ def SaveOperation(window, amount, concept, type):
         with open("TotalIngresado.json", "w") as archivo:
             json.dump(TotalIngresado, archivo)
 
-
-
     window.close()
 
 
 def info():
     from Windows.info import InfoWindow
-    a =InfoWindow()
+    a = InfoWindow()
     a.exec_()
 
 

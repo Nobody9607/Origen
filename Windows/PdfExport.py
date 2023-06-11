@@ -102,9 +102,14 @@ class Ui_Dialog(QtWidgets.QDialog):
         self.checkBox_4.setText(_translate("Dialog", "Diarios"))
         self.checkBox_5.setText(_translate("Dialog", "Ultimos 30"))
         self.checkBox_6.setText(_translate("Dialog", "Ingresos"))
-        self.label.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600; font-style:italic;\">Que desea agregar al PDF</span></p></body></html>"))
-        self.label_2.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; font-weight:600;\">Tablas</span></p></body></html>"))
-        self.label_3.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; font-weight:600;\">Graficas</span></p></body></html>"))
+        self.label.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; "
+                                                "font-weight:600; font-style:italic;\">Que desea agregar al PDF</span><"
+                                                "/p></body></html>"))
+        self.label_2.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" "
+                                                  "font-size:12pt; font-weight:600;\">Tablas</span></p></body></html>"))
+        self.label_3.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" "
+                                                  "font-size:12pt; font-weight:600;\">Graficas</span></p></"
+                                                  "body></html>"))
         self.checkBox_7.setText(_translate("Dialog", "Diarios"))
         self.checkBox_8.setText(_translate("Dialog", "Ultimas 30"))
         self.checkBox_9.setText(_translate("Dialog", "Ultimos 30"))
@@ -113,7 +118,6 @@ class Ui_Dialog(QtWidgets.QDialog):
         self.checkBox_12.setText(_translate("Dialog", "Gastos"))
         self.pushButton.setText(_translate("Dialog", "Aceptar"))
         self.pushButton_2.setText(_translate("Dialog", "Cancelar"))
-
 
     def StateChanged(self, state, palabra):
         if state == QtCore.Qt.Checked:
