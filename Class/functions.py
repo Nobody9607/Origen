@@ -1,10 +1,11 @@
 from PyQt5 import QtWidgets
 from datetime import *
 import pyqtgraph as pg
-from reportlab.pdfgen import canvas
-from reportlab.platypus import Spacer, Paragraph, SimpleDocTemplate, Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib import colors, styles
+import pyqtgraph.exporters
+from pyqtgraph import GraphicsLayoutWidget
+from reportlab.platypus import Spacer, Paragraph, SimpleDocTemplate, Table, Image, KeepTogether
+from reportlab.lib.styles import  ParagraphStyle
+from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 import json
 
@@ -169,9 +170,18 @@ def OpenGraphicsWindow(Type, Frequency):
 
     window = pg.plot()
     window.setGeometry(100, 100, 600, 500)
-    title = "Gráfico de barras con PyQtGraph"
+    title = "Gráfico de barras"
     window.setWindowTitle(title)
 
+    bargraph = CreateGraph(lista)
+
+    window.addItem(bargraph)
+    viewbox = window.getViewBox()
+    viewbox.setMouseEnabled(y=False)
+    viewbox.setLimits(xMin=0)
+
+
+def CreateGraph(lista):
     valores = []
     for dic in lista:
         valor = int(dic["monto"])
@@ -179,16 +189,22 @@ def OpenGraphicsWindow(Type, Frequency):
     x = range(1, len(valores) + 1)
 
     bargraph = pg.BarGraphItem(x=x, height=valores, width=0.8, brush='w')
-    window.addItem(bargraph)
-    viewbox = window.getViewBox()
-    viewbox.setMouseEnabled(y=False)
-    viewbox.setLimits(xMin=0)
+
+    return bargraph
 
 
 def PdfWindow():
     from Windows.PdfExport import Ui_Dialog
     window = Ui_Dialog()
     window.exec_()
+
+
+def GenerateImage(bargraph, name):
+    widget = GraphicsLayoutWidget()
+    plotItem = widget.addPlot()
+    plotItem.addItem(bargraph)
+    exporter = pyqtgraph.exporters.ImageExporter(plotItem)
+    exporter.export(name)
 
 
 def PdfExport(ventana, lista):
@@ -204,7 +220,7 @@ def PdfExport(ventana, lista):
         if not data:
             return
         TableData = [["Fecha", "Monto"]]
-        Text = Paragraph(f"Tabla por dia de {palabra}", styleCenter)
+        Text = Paragraph(f"{palabra} por dia", styleCenter)
 
         for operation in data[-30:]:
             NewList = []
@@ -218,17 +234,16 @@ def PdfExport(ventana, lista):
         table.setStyle([('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke), ])
         table.setStyle([('ALIGN', (0, 0), (-1, -1), 'CENTER')])
 
+        group = KeepTogether([Text, spacer, table])
         PdfElements.append(spacer)
-        PdfElements.append(Text)
-        PdfElements.append(spacer)
-        PdfElements.append(table)
+        PdfElements.append(group)
         PdfElements.append(spacer)
 
     def TableCreate(data, palabra):
         if not data:
             return
         TableData = [["Fecha", "Monto", "Concepto"]]
-        Text = Paragraph(f"Tabla ultimas 30 operaciones en {palabra}", styleCenter)
+        Text = Paragraph(f"Ultimos 30 {palabra}", styleCenter)
         for expense in data[-30:]:
             NewList = []
             NewList.append(expense["fecha"])
@@ -243,11 +258,42 @@ def PdfExport(ventana, lista):
         table.setStyle([('ALIGN', (0, 0), (-1, -1), 'CENTER')])
         table._argW[-1] = 150
 
+        group = KeepTogether([Text, spacer, table])
         PdfElements.append(spacer)
-        PdfElements.append(Text)
+        PdfElements.append(group)
         PdfElements.append(spacer)
-        PdfElements.append(table)
+
+    def GenerateGraph(data, Text, name):
+        Text = Paragraph(f"{Text}", styleCenter)
+        bargraph = CreateGraph(data)
+        GenerateImage(bargraph, name)
+        img = Image(name, height=180, width=350)
+
+        group = KeepTogether([Text, spacer, img])
+        PdfElements.append(group)
         PdfElements.append(spacer)
+
+    def GGDiarios():
+        ExpensesList = ReadExpenses()
+        Operations = DatosDaily(ExpensesList)
+        Text = "Gastos por dia"
+        GenerateGraph(Operations, Text, "DailyExpensesGraph.png")
+
+    def GIDiarios():
+        Ingresos = LeerIngresos()
+        Operations = DatosDaily(Ingresos)
+        Text = "Ingresos por dia"
+        GenerateGraph(Operations, Text, "DailyIngresosGraph.png")
+
+    def GGTodos():
+        ExpensesList = ReadExpenses()
+        Text = "Ultimos 30 gastos"
+        GenerateGraph(ExpensesList, Text, "expensesGraph.png")
+
+    def GITodos():
+        Ingresos = LeerIngresos()
+        Text = "Ultimos 30 ingresos"
+        GenerateGraph(Ingresos, Text, "graficaIngresos.png")
 
     def TGTodos():
         ExpensesList = ReadExpenses()
