@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 from datetime import *
 import pyqtgraph as pg
 import pyqtgraph.exporters
@@ -36,6 +36,13 @@ def LeerTotalGastado():
         TotalGastado = 0
         
     return TotalGastado
+
+
+def notification(TEXTO):
+    from Windows.notification import dialog_animado
+    a = dialog_animado(TEXTO)
+    a.repro()
+
 
 
 def LeerTotalIngresado():
@@ -85,9 +92,9 @@ def LabelUpdate(label, label2, label3):
     TotalGastado = LeerTotalGastado()
     TotalIngresado = LeerTotalIngresado()
     Utilidades = CalcularUtilidades()
-    label.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#828296;\">{TotalGastado}</span></p></body></html>")
-    label2.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#828296;\">{TotalIngresado}</span></p></body></html>")
-    label3.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#828296;\">{Utilidades}</span></p></body></html>")
+    label.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#626276;\">{TotalGastado}</span></p></body></html>")
+    label2.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#626276;\">{TotalIngresado}</span></p></body></html>")
+    label3.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:14pt; font-weight:600; color:#626276;\">{Utilidades}</span></p></body></html>")
 
 
 def error(parent, title, text):
@@ -179,6 +186,7 @@ def OpenGraphicsWindow(Type, Frequency):
     window.setGeometry(100, 100, 600, 500)
     title = "Gráfico de barras"
     window.setWindowTitle(title)
+    window.setWindowIcon(QtGui.QIcon("dependencias/agua2.png"))
 
     bargraph = CreateGraph(lista)
 
@@ -332,5 +340,6 @@ def PdfExport(ventana, lista):
 
     try:
         doc.build(PdfElements)
+        notification("El PDF se ha creado correctamente")
     except Exception as ex:
         error(ventana, "Ha ocurrido un error", f"{ex}")

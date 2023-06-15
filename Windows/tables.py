@@ -1,9 +1,12 @@
 from Class.functions import *
+from PyQt5 import QtGui
 
 
 class tables(QtWidgets.QDialog):
     def __init__(self, Type, Frequency):
         super().__init__()
+        self.setWindowIcon(QtGui.QIcon("dependencias/agua.png"))
+
         self.Type = Type
         self.Frequency = Frequency
         self.setFixedSize(423, 600)
