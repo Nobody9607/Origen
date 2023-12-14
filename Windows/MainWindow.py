@@ -6,7 +6,7 @@ from Class.functions import *
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.setWindowTitle("Contable")
+        self.setWindowTitle("Contable PLUS")
         self.setFixedSize(800, 618)
         self.setWindowIcon(QtGui.QIcon("dependencias/app.ico"))
 
